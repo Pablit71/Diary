@@ -14,7 +14,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: pablit71/graduate_work
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/graduate_work
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -46,6 +46,6 @@ jobs:
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
             password: ${{ secrets.SSH_PASSWORD }}
-            source: "deploy/docker-compose.yaml,deploy/.env,deploy/nginx.conf"
+            source: "deploy/*"
             target: todolist
             strip_components: 1
