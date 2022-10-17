@@ -15,8 +15,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 3
-    ports:
-      - "5432:5432"
+
 
   frontend:
     image: sermalenk/skypro-front:lesson-34
@@ -26,10 +25,11 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
 
 
   api:
+    image: pablit71/graduate_work:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -41,10 +41,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./src/:/opt/todolist
+
 
 volumes:
   pg_data_todolist:
