@@ -30,9 +30,6 @@ services:
 
   api:
     image: pablit71/graduate_work:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
     restart: always
     env_file:
       - ./.env
