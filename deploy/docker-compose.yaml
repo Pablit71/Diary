@@ -17,6 +17,17 @@ services:
       retries: 3
 
 
+  api:
+    image: ${DOCKERHUB_USERNAME}/graduate_work:latest
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   frontend:
     image: sermalenk/skypro-front:lesson-34
     restart: always
@@ -27,17 +38,6 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
 
-
-  api:
-    image: pablit71/graduate_work:latest
-    restart: always
-    env_file:
-      - ./.env
-    environment:
-      POSTGRES_HOST: postgres
-    depends_on:
-      postgres:
-        condition: service_healthy
 
 
 volumes:
