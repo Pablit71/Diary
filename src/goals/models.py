@@ -55,3 +55,13 @@ class Goal(BaseModel):
 
     due_date = models.DateTimeField(verbose_name='Дата выполнения', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Автор', related_name='goals')
+
+
+class GoalComment(BaseModel):
+    user = models.ForeignKey(User, verbose_name='Автор', on_delete=models.PROTECT, related_name='comments')
+    goal = models.ForeignKey(Goal, verbose_name='Цель', on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField(verbose_name='Текст')
+
+    class Meta:
+        verbose_name = 'Коментарий'
+        verbose_name_plural = 'Коментарии'
