@@ -2,7 +2,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-from rest_framework.exceptions import AuthenticationFailed, ValidationError
+from rest_framework.exceptions import (AuthenticationFailed, NotAuthenticated,
+                                       ValidationError)
 
 from core.models import User
 
@@ -40,7 +41,7 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'first_name', 'last_name', 'email')
+        fields = ('username', 'password')
 
     def create(self, validated_data: dict):
         if not (user := authenticate(
@@ -64,15 +65,15 @@ class UpdatePasswordSerializer(serializers.Serializer):
 
     def validate(self, attrs: dict):
         if not (user := attrs['user']):
-            raise NotImplemented
+            raise NotAuthenticated
         if not user.check_password(attrs['old_password']):
             raise ValidationError({'old_password': 'field is incorret'})
         return attrs
 
-    def create(self, validated_data: dict):
+    def create(self, validated_data: dict) -> User:
         raise NotImplementedError
 
-    def update(self, instance: User, validated_data: dict):
+    def update(self, instance: User, validated_data: dict) -> User:
         instance.password = make_password(validated_data['new_password'])
         instance.save(update_fields=('password',))
         return instance
