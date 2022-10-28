@@ -29,7 +29,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
 ALLOWED_HOSTS = ['*']
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DEBUG', default=False)
 # Application definition
 
 INSTALLED_APPS = [

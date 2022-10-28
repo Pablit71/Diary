@@ -1,5 +1,6 @@
 from django.contrib.auth import login, logout
 from rest_framework import generics, permissions, status
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
 from core.models import User
@@ -11,7 +12,7 @@ class SignupView(generics.CreateAPIView):
     serializer_class = CreateUserSerializer
 
 
-class LoginView(generics.GenericAPIView):
+class LoginView(CreateAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
