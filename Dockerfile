@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-WORKDIR /opt/todolist
+WORKDIR /opt/todolist/
 
 COPY src/requirements.txt .
 
