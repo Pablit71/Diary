@@ -47,6 +47,20 @@ INSTALLED_APPS = [
 
 ]
 
+
+def simple_middleware(get_response):
+    # Единовременная настройка и инициализация.
+    def middleware(request):
+        # Код должен быть выполнен для каждого запроса
+        # до view
+        response = get_response(request)
+        print(response)
+        # Код должен быть выполнен ответа после view
+        return response
+
+    return middleware
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

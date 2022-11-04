@@ -29,9 +29,16 @@ class BoardListView(ListAPIView):
     permission_classes = [BoardPermissions]
     serializer_class = BoardListSerializer
     ordering = ['title']
+    pagination_class = LimitOffsetPagination
+    filter_backends = [
+        filters.OrderingFilter,
+        filters.SearchFilter,
+        DjangoFilterBackend
+    ]
 
     def get_queryset(self):
-        return Board.objects.prefetch_related('participants').filter(participants__user_id=self.request.user.id)
+        return Board.objects.prefetch_related('participants').filter(
+            participants__user_id=self.request.user.id, is_deleted=False)
 
 
 class BoardView(RetrieveUpdateDestroyAPIView):
@@ -40,16 +47,21 @@ class BoardView(RetrieveUpdateDestroyAPIView):
     serializer_class = BoardSerializer
 
     def get_queryset(self):
-        return Board.objects.prefetch_related('participants').filter(participants__user_id=self.request.user.id)
+        return Board.objects.prefetch_related('participants').filter(
+            participants__user_id=self.request.user.id,
+            is_deleted=False
+        )
 
     def perform_destroy(self, instance: Board):
         with transaction.atomic():
             instance.is_deleted = True
             instance.save(update_fields=('is_deleted',))
-            instance.categories.is_deleted = True
+            instance.categories.update(is_deleted=True)
             Goal.objects.filter(category__board=instance).update(
-                status=Goal.status.archived
+                status=Goal.Status.archived
             )
+        return instance
+
 
 
 class GoalCategoryCreateView(CreateAPIView):
@@ -94,9 +106,9 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     def perform_destroy(self, instance: GoalCategory):
         with transaction.atomic():
             instance.is_deleted = True
-            instance.save(update_fields='is_deleted', )
+            instance.save(update_fields=('is_deleted',))
             Goal.objects.filter(category=instance).update(status=Goal.Status.archived)
-            return instance
+        return instance
 
 
 class GoalCreateView(CreateAPIView):

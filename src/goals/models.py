@@ -12,12 +12,12 @@ class BaseModel(models.Model):
 
 
 class Board(BaseModel):
+    title = models.CharField(verbose_name='Название', max_length=255)
+    is_deleted = models.BooleanField(verbose_name='Удалена', default=False)
+
     class Meta:
         verbose_name = 'Доска'
         verbose_name_plural = 'Доски'
-
-    title = models.CharField(verbose_name='Название', max_length=255)
-    is_deleted = models.BooleanField(verbose_name='Удалена', default=False)
 
 
 class BoardParticipant(BaseModel):
