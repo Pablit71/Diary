@@ -19,12 +19,12 @@ from goals.serializers import (BoardCreateSerializer, BoardListSerializer,
                                GoalSerializer)
 
 
-class BoardCreateView(CreateAPIView):
+class BoardCreateView(CreateAPIView): # вьюшка для создания доски
     permission_classes = [BoardPermissions]
     serializer_class = BoardCreateSerializer
 
 
-class BoardListView(ListAPIView):
+class BoardListView(ListAPIView): # вьюшка для гет запросов доски
     model = Board
     permission_classes = [BoardPermissions]
     serializer_class = BoardListSerializer
@@ -41,7 +41,7 @@ class BoardListView(ListAPIView):
             participants__user_id=self.request.user.id, is_deleted=False)
 
 
-class BoardView(RetrieveUpdateDestroyAPIView):
+class BoardView(RetrieveUpdateDestroyAPIView): # вьюшка для редактирования доски
     model = Board
     permission_classes = [BoardPermissions]
     serializer_class = BoardSerializer
@@ -85,7 +85,7 @@ class GoalCategoryListView(ListAPIView):
     ordering = ['title']
     search_fields = ['title']
 
-    def get_queryset(self):
+    def get_queryset(self): # измененая функция для отображения доски
         return GoalCategory.objects.prefetch_related('board__participants').filter(
             board__participants__user_id=self.request.user.id,
             is_deleted=False
@@ -97,7 +97,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     serializer_class = GoalCategorySerializer
     permission_classes = [GoalCategoryPermissions]
 
-    def get_queryset(self):
+    def get_queryset(self): # изменена функция для редактирования
         return GoalCategory.objects.prefetch_related('board__participants').filter(
             board__participants__user_id=self.request.user.id,
             is_deleted=False
@@ -130,7 +130,7 @@ class GoalListView(ListAPIView):
     ordering = ['title']
     search_fields = ['title', 'description']
 
-    def get_queryset(self):
+    def get_queryset(self): # функция для отобржанеия целей
         return Goal.objects.select_related('user', 'category__board').filter(
             Q(category__board__participants__user_id=self.request.user.id) & ~Q(status=Goal.Status.archived),
         )
@@ -141,7 +141,7 @@ class GoalView(RetrieveUpdateDestroyAPIView):
     serializer_class = GoalSerializer
     permission_classes = [GoalPermissions]
 
-    def get_queryset(self):
+    def get_queryset(self):# функция для редактирования целей
         return Goal.objects.select_related('user', 'category__board').filter(
             Q(category__board__participants__user_id=self.request.user.id) & ~Q(status=Goal.Status.archived),
         )
@@ -167,7 +167,7 @@ class GoalListCommentView(ListAPIView):
     filterset_fields = ['goal']
     ordering = ['-created']
 
-    def get_queryset(self):
+    def get_queryset(self):# функция для отображения комментариев
         return GoalComment.objects.select_related('goal__category__board', 'user').filter(
             goal__category__board__participants__user_id=self.request.user.id)
 

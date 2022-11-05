@@ -27,7 +27,7 @@ class GoalCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'created', 'updated', 'user', 'board')
 
-    def validate(self, value: Board):
+    def validate(self, value: Board):  # изменен валидатор
         if value.is_deleted:
             raise serializers.ValidationError('Невозможно удалить')
 
@@ -51,8 +51,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'created', 'updated', 'user')
 
-
-    def validate_category(self, value: GoalCategory):
+    def validate_category(self, value: GoalCategory): # изменен валидатор
         if self.context['request'].user != value.user:
             raise PermissionDenied
 
@@ -108,7 +107,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created', 'updated')
         fields = '__all__'
 
-    def create(self, validated_data):
+    def create(self, validated_data):# сделан create для создание доски
         user = validated_data.pop('user')
         board = Board.objects.create(**validated_data)
         BoardParticipant.objects.create(
@@ -117,7 +116,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         return board
 
 
-class BoardParticipantSerializer(serializers.ModelSerializer):
+class BoardParticipantSerializer(serializers.ModelSerializer): # сделан сериализатор для ролей
     role = serializers.ChoiceField(required=True, choices=BoardParticipant.Role.choices[1:0])
     user = serializers.SlugRelatedField(
         slug_field='username', queryset=User.objects.all()
@@ -129,7 +128,7 @@ class BoardParticipantSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created', 'updated', 'board')
 
 
-class BoardSerializer(serializers.ModelSerializer):
+class BoardSerializer(serializers.ModelSerializer): # Сделан сериализатор для изменений и удалений
     participants = BoardParticipantSerializer(many=True)
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
@@ -169,7 +168,7 @@ class BoardSerializer(serializers.ModelSerializer):
         return instance
 
 
-class BoardListSerializer(serializers.ModelSerializer):
+class BoardListSerializer(serializers.ModelSerializer): # сериализатор для гет запросов доски
     class Meta:
         model = Board
         fields = '__all__'
