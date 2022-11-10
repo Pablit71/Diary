@@ -12,7 +12,8 @@ from goals.models import Board, Goal, GoalCategory, GoalComment
 from goals.permissions import (BoardPermissions, CommentPermissions,
                                GoalCategoryPermissions, GoalPermissions)
 from goals.serializers import (BoardCreateSerializer, BoardListSerializer,
-                               BoardSerializer, GoalCategoryCreateSerializer,
+                               BoardParticipantSerializer, BoardSerializer,
+                               GoalCategoryCreateSerializer,
                                GoalCategorySerializer,
                                GoalCommentCreateSerializer,
                                GoalCommentSerializer, GoalCreateSerializer,
@@ -61,6 +62,7 @@ class BoardView(RetrieveUpdateDestroyAPIView):
                 status=Goal.Status.archived
             )
         return instance
+
 
 
 

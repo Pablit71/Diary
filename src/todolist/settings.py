@@ -48,17 +48,17 @@ INSTALLED_APPS = [
 ]
 
 
-def simple_middleware(get_response):
-    # Единовременная настройка и инициализация.
-    def middleware(request):
-        # Код должен быть выполнен для каждого запроса
-        # до view
-        response = get_response(request)
-        print(response)
-        # Код должен быть выполнен ответа после view
-        return response
-
-    return middleware
+# def simple_middleware(get_response):
+#     # Единовременная настройка и инициализация.
+#     def middleware(request):
+#         # Код должен быть выполнен для каждого запроса
+#         # до view
+#         response = get_response(request)
+#         print(response)
+#         # Код должен быть выполнен ответа после view
+#         return response
+#
+#     return middleware
 
 
 MIDDLEWARE = [
@@ -69,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'src.todolist.settings.simple_middleware'
 ]
 
 ROOT_URLCONF = 'todolist.urls'
