@@ -21,6 +21,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('oauth/', include('social_django.urls', namespace='social')),
     path('core/', include('core.urls')),
-    path('goals/', include('goals.urls'))
+    path('goals/', include('goals.urls')),
+    path('bot/', include('telegrambot.urls'))
 
 ]

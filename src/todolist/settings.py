@@ -18,7 +18,6 @@ env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 environ.Env.read_env(BASE_DIR.joinpath('.env'))
-print(BASE_DIR.joinpath('.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -44,6 +43,7 @@ INSTALLED_APPS = [
     'social_django',
     'core',
     'goals',
+    'telegrambot'
 
 ]
 
@@ -158,3 +158,4 @@ SOCIAL_AUTH_VK_EXTRA_DATA = [
 ]
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/logged-in/'
 SOCIAL_AUTH_USER_MODEL = 'core.User'
+BOT_TOKEN = '5696242375:AAEZdpic1ymosOywnTunfOZHDyRtDS2pP0s'
