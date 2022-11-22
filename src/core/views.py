@@ -43,23 +43,3 @@ class UpdatePassView(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user
-
-
-# class BotVerification(UpdateAPIView):
-#     serializer_class = BotVerificationSerializer
-#     queryset = User.objects.all()
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def get_object(self) -> User:
-#         return self.request.user
-#
-#     def patch(self, request, *args, **kwargs):
-#         s: BotVerificationSerializer = self.get_serializer(data=request.data)
-#         s.is_valid(raise_exception=True)
-#         user: User = s.data['verification_code']
-#         user = self.request.user
-#         user.save(update_fields=('verification_code',))
-#
-#         instance_s: BotVerificationSerializer = self.get_serializer(user)
-#         return Response(instance_s.data)
-#
