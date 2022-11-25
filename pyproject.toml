@@ -10,3 +10,18 @@ max-line-length = 120
 per-file-ignores = """
    venv
 """
+
+[tool.poetry]
+name = "poetryproject"
+version = "0.1.0"
+description = ""
+authors = ["pavellis <manbyak5@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

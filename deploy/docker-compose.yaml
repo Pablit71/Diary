@@ -16,6 +16,17 @@ services:
       timeout: 3s
       retries: 3
 
+  bot:
+    image: ${DOCKERHUB_USERNAME}/graduate_work:latest
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: python manage.py runbot
 
   api:
     image: ${DOCKERHUB_USERNAME}/graduate_work:latest
@@ -29,7 +40,7 @@ services:
         condition: service_healthy
 
   frontend:
-    image: sermalenk/skypro-front:lesson-34
+    image: sermalenk/skypro-front:lesson-38
     restart: always
     depends_on:
       - api
