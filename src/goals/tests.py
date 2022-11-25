@@ -4,26 +4,12 @@ from django.test import Client
 from django.urls import reverse
 from rest_framework.test import APITestCase
 
-from core.models import User
-from core.serializers import LoginSerializer
+c = Client()
 
 
 class SerializerTestCase(APITestCase):
-    def test_create_user_serializer(self):
-        user_create = User.objects.create(
-            username='test_username',
-            first_name='test_name',
-            last_name='test_last_name',
-            is_superuser=False,
-            password='test_password123'
-
-        )
-        user = str(User.objects.get(username=user_create.username))
-        serializer = LoginSerializer(user_create).data
-        self.assertEqual(serializer['username'], user)
 
     def test_create(self):
-        c = Client()
         user_create = c.post(
             '/core/signup',
             {
@@ -48,9 +34,9 @@ class SerializerTestCase(APITestCase):
             }
         )
         url_board = reverse('board_list')
-        response = c.get(url_board)
-        self.assertEqual(response.data[0]['title'], board_create.data['title'])
-        self.assertEqual(response.data[0]['id'], board_create.data['id'])
+        response_board = c.get(url_board)
+        self.assertEqual(response_board.data[0]['title'], board_create.data['title'])
+        self.assertEqual(response_board.data[0]['id'], board_create.data['id'])
 
         category_create = c.post(
             '/goals/goal_category/create',
@@ -62,9 +48,9 @@ class SerializerTestCase(APITestCase):
             }
         )
         url_category = reverse('cat_list')
-        response = c.get(url_category)
-        self.assertEqual(response.data[0]['title'], category_create.data['title'])
-        self.assertEqual(response.data[0]['id'], category_create.data['id'])
+        response_category = c.get(url_category)
+        self.assertEqual(response_category.data[0]['title'], category_create.data['title'])
+        self.assertEqual(response_category.data[0]['id'], category_create.data['id'])
 
         goal_create = c.post(
             '/goals/goal/create',
@@ -81,9 +67,9 @@ class SerializerTestCase(APITestCase):
             }
         )
         url_goal = reverse('goal_list')
-        response = c.get(url_goal)
-        self.assertEqual(response.data[0]['title'], goal_create.data['title'])
-        self.assertEqual(response.data[0]['id'], goal_create.data['id'])
+        response_goal = c.get(url_goal)
+        self.assertEqual(response_goal.data[0]['title'], goal_create.data['title'])
+        self.assertEqual(response_goal.data[0]['id'], goal_create.data['id'])
 
         comment_create = c.post(
             '/goals/goal_comment/create',
@@ -98,6 +84,38 @@ class SerializerTestCase(APITestCase):
         )
 
         url_comment = reverse('comment_list')
-        response = c.get(url_comment)
-        self.assertEqual(response.data[0]['text'], comment_create.data['text'])
-        self.assertEqual(response.data[0]['id'], comment_create.data['id'])
+        response_comment = c.get(url_comment)
+        self.assertEqual(response_comment.data[0]['text'], comment_create.data['text'])
+        self.assertEqual(response_comment.data[0]['id'], comment_create.data['id'])
+
+        """
+
+
+
+        """
+        category_update = c.put(
+            '/goals/goal_category/1',
+            {
+                'title': 'test_category_2',
+                'board': 1,
+            },
+            content_type='application/json'
+
+        )
+        response_update_category = c.get(url_category)
+        self.assertEqual(response_update_category.data[0]['title'], category_update.data['title'])
+        self.assertEqual(response_update_category.data[0]['id'], category_update.data['id'])
+
+        goal_update = c.put(
+            '/goals/goal/1',
+            {
+                'category': 1,
+                'title': 'test_goal_2'
+            },
+            content_type='application/json'
+
+        )
+
+        response_update_goal = c.get(url_goal)
+        self.assertEqual(response_update_goal.data[0]['title'], goal_update.data['title'])
+        self.assertEqual(response_update_goal.data[0]['id'], goal_update.data['id'])

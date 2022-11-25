@@ -25,19 +25,8 @@ class GoalCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalCategory
         fields = '__all__'
-        read_only_fields = ('id', 'created', 'updated', 'user', 'board')
+        read_only_fields = ('id', 'created', 'updated', 'user', 'board' 'is_deleted')
 
-    def validate(self, value: Board):
-        if value.is_deleted:
-            raise serializers.ValidationError('Невозможно удалить')
-
-        if not BoardParticipant.objects.filter(
-                board=value,
-                role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],
-                user=self.context['request'].user
-        ).exists():
-            raise serializers.ValidationError('Нет доступа')
-        return value
 
 
 class GoalCreateSerializer(serializers.ModelSerializer):
