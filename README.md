@@ -1,4 +1,4 @@
-# graduate_work
+# Diary
 
 ## 1) Stack
 
